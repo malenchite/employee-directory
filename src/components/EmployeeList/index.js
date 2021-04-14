@@ -10,8 +10,8 @@ class EmployeeList extends React.Component {
     this.state = {
       count: props.count,
       employees: [],
-      nameSortOrder: false,
-      stateSortOrder: false,
+      nameSortOrder: "None",
+      stateSortOrder: "None",
       stateSortEnabled: true
     };
   }
@@ -27,6 +27,7 @@ class EmployeeList extends React.Component {
   /* Sorts the employee list by last name */
   sortByName = (event) => {
     event.preventDefault();
+
     const sorted = this.state.employees.sort((a, b) => {
       let nameA = a.name.last.toUpperCase();
       let nameB = b.name.last.toUpperCase();
@@ -39,17 +40,19 @@ class EmployeeList extends React.Component {
 
       return 0;
     });
+    let newSortOrder = "Forward";
 
     /* Toggles sort order if used several times */
-    if (this.state.nameSortOrder) {
+    if (this.state.nameSortOrder === "Forward") {
+      newSortOrder = "Reverse";
       sorted.reverse();
     }
 
     this.setState(
       {
         employees: sorted,
-        nameSortOrder: !this.state.nameSortOrder,
-        stateSortOrder: false
+        nameSortOrder: newSortOrder,
+        stateSortOrder: "None"
       }
     );
   }
@@ -69,17 +72,19 @@ class EmployeeList extends React.Component {
 
       return 0;
     });
+    let newSortOrder = "Forward";
 
     /* Toggles sort order if used several times */
-    if (this.state.stateSortOrder) {
+    if (this.state.stateSortOrder === "Forward") {
+      newSortOrder = "Reverse";
       sorted.reverse();
     }
 
     this.setState(
       {
         employees: sorted,
-        stateSortOrder: !this.state.stateSortOrder,
-        nameSortOrder: false
+        stateSortOrder: newSortOrder,
+        nameSortOrder: "None"
       }
     );
   }
@@ -116,13 +121,13 @@ class EmployeeList extends React.Component {
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">Name</label>
-                  <SortButton onClick={this.sortByName} disabled={false} />
+                  <SortButton onClick={this.sortByName} disabled={false} sortOrder={this.state.nameSortOrder} />
                 </form>
               </th>
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">State</label>
-                  <SortButton onClick={this.sortByState} disabled={!this.state.stateSortEnabled} />
+                  <SortButton onClick={this.sortByState} disabled={!this.state.stateSortEnabled} sortOrder={this.state.stateSortOrder} />
                   <StateSelect data={this.state.employees} changeFunction={this.handleStateFilter} />
                 </form>
               </th>
