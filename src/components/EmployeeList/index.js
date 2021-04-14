@@ -3,6 +3,7 @@ import randomUsers from "./randomUserAPI"
 import Employee from "../Employee"
 import StateSelect from "../StateSelect"
 import SortButton from "../SortButton"
+import "./style.css"
 
 class EmployeeList extends React.Component {
   constructor(props) {
@@ -114,8 +115,8 @@ class EmployeeList extends React.Component {
 
   render() {
     return (
-      <section>
-        <table className="table table-striped">
+      <section className="container">
+        <table className="table custom-striped">
           <thead>
             <tr>
               <th scope="col">

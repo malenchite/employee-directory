@@ -1,0 +1,5 @@
+
+/* Sets the alternating striped color for the table */
+.custom-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: rgba(0, 183, 255, 0.15) ;
+}

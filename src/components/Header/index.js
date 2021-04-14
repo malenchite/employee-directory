@@ -1,7 +1,9 @@
+import "./style.css"
+
 function Header() {
   return (
-    <header className="jumbotron">
-      <h1>Employee Directory</h1>
+    <header className="jumbotron directory-head">
+      <h1 className="text-center">Employee Directory</h1>
     </header>
   );
 }
