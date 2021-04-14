@@ -2,7 +2,7 @@ import React from "react"
 import randomUsers from "./randomUserAPI"
 import Employee from "../Employee"
 import StateSelect from "../StateSelect"
-import SortButton from "../SortButton"
+import SortHeader from "../SortHeader"
 import "./style.css"
 
 class EmployeeList extends React.Component {
@@ -112,15 +112,25 @@ class EmployeeList extends React.Component {
             <tr>
               <th scope="col">
                 <form className="form-inline" autocomplete="off">
-                  <label className="mr-2">Name</label>
-                  <SortButton onClick={this.sortByName} disabled={false} sortOrder={this.state.sortType === "Name" ? this.state.sortOrder : "None"} />
+                  <SortHeader
+                    label="Name"
+                    clickFunction={this.sortByName}
+                    disabled={false}
+                    sortType={this.state.sortType}
+                    sortOrder={this.state.sortOrder}
+                  />
                   <input className="form-control form-control-sm" name="nameFilter" placeholder="Filter" onChange={this.handleFormChange} />
                 </form>
               </th>
               <th scope="col">
                 <form className="form-inline">
-                  <label className="mr-2">State</label>
-                  <SortButton onClick={this.sortByState} disabled={this.state.stateFilter !== "All"} sortOrder={this.state.sortType === "State" ? this.state.sortOrder : "None"} />
+                  <SortHeader
+                    label="State"
+                    clickFunction={this.sortByState}
+                    disabled={this.state.stateFilter !== "All"}
+                    sortType={this.state.sortType}
+                    sortOrder={this.state.sortOrder}
+                  />
                   <StateSelect data={this.state.employees} name="stateFilter" changeFunction={this.handleFormChange} />
                 </form>
               </th>
