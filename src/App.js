@@ -5,7 +5,7 @@ function App() {
   return (
     <div>
       <Header />
-      <EmployeeList />
+      <EmployeeList count={10} />
     </div>
   );
 }
