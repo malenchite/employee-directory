@@ -6,20 +6,17 @@ import SortButton from "../SortButton"
 import "./style.css"
 
 class EmployeeList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      count: props.count,
-      employees: [],
-      nameSortOrder: "None",
-      stateSortOrder: "None",
-      stateSortEnabled: true
-    };
+  state = {
+    employees: [],
+    nameSortOrder: "None",
+    stateSortOrder: "None",
+    stateFilter: "All",
+    nameFilter: ""
   }
 
   /* Construct the list of employees on component mount */
   componentDidMount() {
-    randomUsers(this.state.count)
+    randomUsers(this.props.count)
       .then(users => {
         this.setState({ employees: users });
       });
@@ -90,27 +87,27 @@ class EmployeeList extends React.Component {
     );
   }
 
-  /* Sets the filtered state on employees based on whether they match the specified state */
-  handleStateFilter = (event) => {
-    const filtered = [...this.state.employees];
-
-    if (event.target.value !== "All") {
-      filtered.forEach(employee => {
-        employee.filtered = employee.state !== event.target.value;
-      });
-    } else {
-      filtered.forEach(employee => {
-        employee.filtered = false;
-      });
-    }
-
+  /* Handles form value change by updating state */
+  handleFormChange = (event) => {
     this.setState(
       {
-        employees: filtered,
-        stateFilter: event.target.value,
-        stateSortEnabled: event.target.value === "All"
+        [event.target.name]: event.target.value.trim()
       }
     );
+  }
+
+  /* Checks the filter on an employee based on whether they match the current criteria */
+  checkFilter = employee => {
+    let filtered;
+
+    /* Filter based on state */
+    filtered = this.state.stateFilter !== "All" && employee.state !== this.state.stateFilter;
+
+    /* Filter based on name */
+    filtered |= !(employee.firstName.toUpperCase().includes(this.state.nameFilter.toUpperCase())
+      || employee.lastName.toUpperCase().includes(this.state.nameFilter.toUpperCase()));
+
+    return !filtered;
   }
 
   render() {
@@ -123,13 +120,14 @@ class EmployeeList extends React.Component {
                 <form className="form-inline">
                   <label className="mr-2">Name</label>
                   <SortButton onClick={this.sortByName} disabled={false} sortOrder={this.state.nameSortOrder} />
+                  <input className="form-control form-control-sm" name="nameFilter" placeholder="Filter" onChange={this.handleFormChange} />
                 </form>
               </th>
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">State</label>
-                  <SortButton onClick={this.sortByState} disabled={!this.state.stateSortEnabled} sortOrder={this.state.stateSortOrder} />
-                  <StateSelect data={this.state.employees} changeFunction={this.handleStateFilter} />
+                  <SortButton onClick={this.sortByState} disabled={this.state.stateFilter !== "All"} sortOrder={this.state.stateSortOrder} />
+                  <StateSelect data={this.state.employees} name="stateFilter" changeFunction={this.handleFormChange} />
                 </form>
               </th>
               <th scope="col">Email</th>
@@ -138,7 +136,7 @@ class EmployeeList extends React.Component {
           </thead>
           <tbody>
             {this.state.employees
-              .filter(employee => !employee.filtered)
+              .filter(employee => this.checkFilter(employee))
               .map(employee => (
                 <Employee key={employee.id} data={employee} />
               ))

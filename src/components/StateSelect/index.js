@@ -11,7 +11,7 @@ function StateSelect(props) {
   stateList.unshift("All");
 
   return (
-    <select className="custom-select custom-select-sm" onChange={props.changeFunction}>
+    <select className="custom-select custom-select-sm" name={props.name} onChange={props.changeFunction}>
       {stateList.map(state => (
         <option key={state}>{state}</option>
       ))}
