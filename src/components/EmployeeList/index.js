@@ -7,7 +7,8 @@ class EmployeeList extends React.Component {
     super(props);
     this.state = {
       count: props.count,
-      employees: []
+      employees: [],
+      sortOrder: false
     };
   }
 
@@ -19,13 +20,42 @@ class EmployeeList extends React.Component {
       });
   }
 
+  /* Sorts the employee list by last name */
+  sortByName = () => {
+    const sorted = this.state.employees.sort((a, b) => {
+      let nameA = a.name.last.toUpperCase();
+      let nameB = b.name.last.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    /* Toggles sort order if used several times */
+    if (this.state.sortOrder) {
+      sorted.reverse();
+    }
+
+    this.setState(
+      {
+        employees: sorted,
+        sortOrder: !this.state.sortOrder
+      }
+    );
+  }
+
+
   render() {
     return (
       <section>
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Name</th>
+              <th scope="col">Name <button className="btn btn-sm btn-secondary" onClick={this.sortByName}>Sort</button></th>
               <th scope="col">State</th>
               <th scope="col">Email</th>
               <th scope="col">Phone</th>
