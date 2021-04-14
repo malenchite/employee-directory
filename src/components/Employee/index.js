@@ -1,8 +1,11 @@
 function Employee(props) {
   return (
-    <div>
-      {props.data.name.first + " " + props.data.name.last}
-    </div>
+    <tr>
+      <td>{props.data.name.last}, {props.data.name.first}</td>
+      <td>{props.data.location.state}</td>
+      <td>{props.data.email}</td>
+      <td>{props.data.phone}</td>
+    </tr>
   );
 }
 

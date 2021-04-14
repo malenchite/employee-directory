@@ -11,6 +11,7 @@ class EmployeeList extends React.Component {
     };
   }
 
+  /* Construct the list of employees on component mount */
   componentDidMount() {
     randomUsers(this.state.count)
       .then(users => {
@@ -21,9 +22,21 @@ class EmployeeList extends React.Component {
   render() {
     return (
       <section>
-        {this.state.employees.map(employee => (
-          <Employee key={employee.login.uuid} data={employee} />
-        ))}
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">State</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.employees.map(employee => (
+              <Employee key={employee.login.uuid} data={employee} />
+            ))}
+          </tbody>
+        </table>
       </section>
     );
   }
