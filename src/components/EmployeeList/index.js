@@ -2,6 +2,7 @@ import React from "react"
 import randomUsers from "./randomUserAPI"
 import Employee from "../Employee"
 import StateSelect from "../StateSelect"
+import SortButton from "../SortButton"
 
 class EmployeeList extends React.Component {
   constructor(props) {
@@ -115,13 +116,13 @@ class EmployeeList extends React.Component {
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">Name</label>
-                  <button className="btn btn-sm btn-secondary" onClick={this.sortByName}>Sort</button>
+                  <SortButton onClick={this.sortByName} disabled={false} />
                 </form>
               </th>
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">State</label>
-                  <button className="btn btn-sm btn-secondary mr-2" onClick={this.sortByState} disabled={!this.state.stateSortEnabled}>Sort</button>
+                  <SortButton onClick={this.sortByState} disabled={!this.state.stateSortEnabled} />
                   <StateSelect data={this.state.employees} changeFunction={this.handleStateFilter} />
                 </form>
               </th>
