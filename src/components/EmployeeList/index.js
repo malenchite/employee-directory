@@ -10,7 +10,8 @@ class EmployeeList extends React.Component {
       count: props.count,
       employees: [],
       nameSortOrder: false,
-      stateSortOrder: false
+      stateSortOrder: false,
+      stateSortEnabled: true
     };
   }
 
@@ -98,7 +99,9 @@ class EmployeeList extends React.Component {
 
     this.setState(
       {
-        employees: filtered
+        employees: filtered,
+        stateFilter: event.target.value,
+        stateSortEnabled: event.target.value === "All"
       }
     );
   }
@@ -118,7 +121,7 @@ class EmployeeList extends React.Component {
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">State</label>
-                  <button className="btn btn-sm btn-secondary mr-2" onClick={this.sortByState}>Sort</button>
+                  <button className="btn btn-sm btn-secondary mr-2" onClick={this.sortByState} disabled={!this.state.stateSortEnabled}>Sort</button>
                   <StateSelect data={this.state.employees} changeFunction={this.handleStateFilter} />
                 </form>
               </th>
