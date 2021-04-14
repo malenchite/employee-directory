@@ -9,7 +9,8 @@ class EmployeeList extends React.Component {
     this.state = {
       count: props.count,
       employees: [],
-      sortOrder: false
+      nameSortOrder: false,
+      stateSortOrder: false
     };
   }
 
@@ -38,14 +39,45 @@ class EmployeeList extends React.Component {
     });
 
     /* Toggles sort order if used several times */
-    if (this.state.sortOrder) {
+    if (this.state.nameSortOrder) {
       sorted.reverse();
     }
 
     this.setState(
       {
         employees: sorted,
-        sortOrder: !this.state.sortOrder
+        nameSortOrder: !this.state.nameSortOrder,
+        stateSortOrder: false
+      }
+    );
+  }
+
+  /* Sorts the employee list by state */
+  sortByState = (event) => {
+    event.preventDefault();
+    const sorted = this.state.employees.sort((a, b) => {
+      let stateA = a.location.state.toUpperCase();
+      let stateB = b.location.state.toUpperCase();
+      if (stateA < stateB) {
+        return -1;
+      }
+      if (stateA > stateB) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    /* Toggles sort order if used several times */
+    if (this.state.stateSortOrder) {
+      sorted.reverse();
+    }
+
+    this.setState(
+      {
+        employees: sorted,
+        stateSortOrder: !this.state.stateSortOrder,
+        nameSortOrder: false
       }
     );
   }
@@ -69,7 +101,6 @@ class EmployeeList extends React.Component {
         employees: filtered
       }
     );
-
   }
 
   render() {
@@ -87,6 +118,7 @@ class EmployeeList extends React.Component {
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">State</label>
+                  <button className="btn btn-sm btn-secondary mr-2" onClick={this.sortByState}>Sort</button>
                   <StateSelect data={this.state.employees} changeFunction={this.handleStateFilter} />
                 </form>
               </th>
