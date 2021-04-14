@@ -30,8 +30,8 @@ class EmployeeList extends React.Component {
     event.preventDefault();
 
     const sorted = this.state.employees.sort((a, b) => {
-      let nameA = a.name.last.toUpperCase();
-      let nameB = b.name.last.toUpperCase();
+      let nameA = a.lastName.toUpperCase();
+      let nameB = b.lastName.toUpperCase();
       if (nameA < nameB) {
         return -1;
       }
@@ -62,8 +62,8 @@ class EmployeeList extends React.Component {
   sortByState = (event) => {
     event.preventDefault();
     const sorted = this.state.employees.sort((a, b) => {
-      let stateA = a.location.state.toUpperCase();
-      let stateB = b.location.state.toUpperCase();
+      let stateA = a.state.toUpperCase();
+      let stateB = b.state.toUpperCase();
       if (stateA < stateB) {
         return -1;
       }
@@ -96,7 +96,7 @@ class EmployeeList extends React.Component {
 
     if (event.target.value !== "All") {
       filtered.forEach(employee => {
-        employee.filtered = employee.location.state !== event.target.value;
+        employee.filtered = employee.state !== event.target.value;
       });
     } else {
       filtered.forEach(employee => {
@@ -140,7 +140,7 @@ class EmployeeList extends React.Component {
             {this.state.employees
               .filter(employee => !employee.filtered)
               .map(employee => (
-                <Employee key={employee.login.uuid} data={employee} />
+                <Employee key={employee.id} data={employee} />
               ))
             }
           </tbody>

@@ -2,8 +2,8 @@ function StateSelect(props) {
   let stateList = [];
 
   props.data.forEach(employee => {
-    if (!stateList.includes(employee.location.state)) {
-      stateList.push(employee.location.state);
+    if (!stateList.includes(employee.state)) {
+      stateList.push(employee.state);
     }
   });
 
