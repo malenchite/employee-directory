@@ -117,7 +117,7 @@ class EmployeeList extends React.Component {
           <thead>
             <tr>
               <th scope="col">
-                <form className="form-inline">
+                <form className="form-inline" autocomplete="off">
                   <label className="mr-2">Name</label>
                   <SortButton onClick={this.sortByName} disabled={false} sortOrder={this.state.nameSortOrder} />
                   <input className="form-control form-control-sm" name="nameFilter" placeholder="Filter" onChange={this.handleFormChange} />
