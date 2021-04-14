@@ -1,6 +1,7 @@
 import React from "react"
 import randomUsers from "./randomUserAPI"
 import Employee from "../Employee"
+import StateSelect from "../StateSelect"
 
 class EmployeeList extends React.Component {
   constructor(props) {
@@ -21,7 +22,8 @@ class EmployeeList extends React.Component {
   }
 
   /* Sorts the employee list by last name */
-  sortByName = () => {
+  sortByName = (event) => {
+    event.preventDefault();
     const sorted = this.state.employees.sort((a, b) => {
       let nameA = a.name.last.toUpperCase();
       let nameB = b.name.last.toUpperCase();
@@ -48,6 +50,27 @@ class EmployeeList extends React.Component {
     );
   }
 
+  /* Sets the filtered state on employees based on whether they match the specified state */
+  handleStateFilter = (event) => {
+    const filtered = [...this.state.employees];
+
+    if (event.target.value !== "All") {
+      filtered.forEach(employee => {
+        employee.filtered = employee.location.state !== event.target.value;
+      });
+    } else {
+      filtered.forEach(employee => {
+        employee.filtered = false;
+      });
+    }
+
+    this.setState(
+      {
+        employees: filtered
+      }
+    );
+
+  }
 
   render() {
     return (
@@ -55,16 +78,29 @@ class EmployeeList extends React.Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Name <button className="btn btn-sm btn-secondary" onClick={this.sortByName}>Sort</button></th>
-              <th scope="col">State</th>
+              <th scope="col">
+                <form className="form-inline">
+                  <label className="mr-2">Name</label>
+                  <button className="btn btn-sm btn-secondary" onClick={this.sortByName}>Sort</button>
+                </form>
+              </th>
+              <th scope="col">
+                <form className="form-inline">
+                  <label className="mr-2">State</label>
+                  <StateSelect data={this.state.employees} changeFunction={this.handleStateFilter} />
+                </form>
+              </th>
               <th scope="col">Email</th>
               <th scope="col">Phone</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.employees.map(employee => (
-              <Employee key={employee.login.uuid} data={employee} />
-            ))}
+            {this.state.employees
+              .filter(employee => !employee.filtered)
+              .map(employee => (
+                <Employee key={employee.login.uuid} data={employee} />
+              ))
+            }
           </tbody>
         </table>
       </section>
