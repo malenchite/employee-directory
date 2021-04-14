@@ -8,10 +8,11 @@ import "./style.css"
 class EmployeeList extends React.Component {
   state = {
     employees: [],
-    nameSortOrder: "None",
-    stateSortOrder: "None",
+    sortOrder: "None",
     stateFilter: "All",
-    nameFilter: ""
+    nameFilter: "",
+    sortType: "None",
+    sortFunction: (a, b) => 0
   }
 
   /* Construct the list of employees on component mount */
@@ -22,69 +23,62 @@ class EmployeeList extends React.Component {
       });
   }
 
-  /* Sorts the employee list by last name */
-  sortByName = (event) => {
-    event.preventDefault();
+  /* Sets sort type and function */
+  setSort = (type, sortFunction) => {
+    let sortOrder = "Forward";
 
-    const sorted = this.state.employees.sort((a, b) => {
-      let nameA = a.lastName.toUpperCase();
-      let nameB = b.lastName.toUpperCase();
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-
-      return 0;
-    });
-    let newSortOrder = "Forward";
-
-    /* Toggles sort order if used several times */
-    if (this.state.nameSortOrder === "Forward") {
-      newSortOrder = "Reverse";
-      sorted.reverse();
+    // Reverses order if called again with same type
+    if (this.state.sortType === type && this.state.sortOrder === "Forward") {
+      sortOrder = "Reverse";
     }
 
     this.setState(
       {
-        employees: sorted,
-        nameSortOrder: newSortOrder,
-        stateSortOrder: "None"
+        sortOrder,
+        sortType: type,
+        sortFunction
       }
     );
   }
 
-  /* Sorts the employee list by state */
-  sortByState = (event) => {
+  /* Sets sorting to use last name */
+  sortByName = event => {
     event.preventDefault();
-    const sorted = this.state.employees.sort((a, b) => {
-      let stateA = a.state.toUpperCase();
-      let stateB = b.state.toUpperCase();
-      if (stateA < stateB) {
-        return -1;
+
+    const sortFunction = (a, b) => {
+      let nameA = a.lastName.toUpperCase();
+      let nameB = b.lastName.toUpperCase();
+      if (nameA < nameB) {
+        return this.state.sortOrder === "Reverse" ? 1 : -1;
       }
-      if (stateA > stateB) {
-        return 1;
+      if (nameA > nameB) {
+        return this.state.sortOrder === "Reverse" ? -1 : 1;
       }
 
       return 0;
-    });
-    let newSortOrder = "Forward";
+    };
 
-    /* Toggles sort order if used several times */
-    if (this.state.stateSortOrder === "Forward") {
-      newSortOrder = "Reverse";
-      sorted.reverse();
-    }
+    this.setSort("Name", sortFunction);
+  }
 
-    this.setState(
-      {
-        employees: sorted,
-        stateSortOrder: newSortOrder,
-        nameSortOrder: "None"
+  /* Sets sorting to use employee state */
+  sortByState = event => {
+    event.preventDefault();
+
+    const sortFunction = (a, b) => {
+      let stateA = a.state.toUpperCase();
+      let stateB = b.state.toUpperCase();
+      if (stateA < stateB) {
+        return this.state.sortOrder === "Reverse" ? 1 : -1;
       }
-    );
+      if (stateA > stateB) {
+        return this.state.sortOrder === "Reverse" ? -1 : 1;
+      }
+
+      return 0;
+    };
+
+    this.setSort("State", sortFunction);
   }
 
   /* Handles form value change by updating state */
@@ -119,14 +113,14 @@ class EmployeeList extends React.Component {
               <th scope="col">
                 <form className="form-inline" autocomplete="off">
                   <label className="mr-2">Name</label>
-                  <SortButton onClick={this.sortByName} disabled={false} sortOrder={this.state.nameSortOrder} />
+                  <SortButton onClick={this.sortByName} disabled={false} sortOrder={this.state.sortType === "Name" ? this.state.sortOrder : "None"} />
                   <input className="form-control form-control-sm" name="nameFilter" placeholder="Filter" onChange={this.handleFormChange} />
                 </form>
               </th>
               <th scope="col">
                 <form className="form-inline">
                   <label className="mr-2">State</label>
-                  <SortButton onClick={this.sortByState} disabled={this.state.stateFilter !== "All"} sortOrder={this.state.stateSortOrder} />
+                  <SortButton onClick={this.sortByState} disabled={this.state.stateFilter !== "All"} sortOrder={this.state.sortType === "State" ? this.state.sortOrder : "None"} />
                   <StateSelect data={this.state.employees} name="stateFilter" changeFunction={this.handleFormChange} />
                 </form>
               </th>
@@ -135,11 +129,13 @@ class EmployeeList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.employees
-              .filter(employee => this.checkFilter(employee))
-              .map(employee => (
-                <Employee key={employee.id} data={employee} />
-              ))
+            {
+              this.state.employees
+                .filter(employee => this.checkFilter(employee))
+                .sort((empA, empB) => this.state.sortFunction(empA, empB))
+                .map(employee => (
+                  <Employee key={employee.id} data={employee} />
+                ))
             }
           </tbody>
         </table>
