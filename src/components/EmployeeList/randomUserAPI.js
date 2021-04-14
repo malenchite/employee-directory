@@ -9,7 +9,7 @@ async function randomUsers(count) {
         lastName: user.name.last,
         state: user.location.state,
         email: user.email,
-        phoneNumber: user.phoneNumber,
+        phone: user.phone,
         id: user.login.uuid
       }
     }
