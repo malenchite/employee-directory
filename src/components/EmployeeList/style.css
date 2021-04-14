@@ -3,3 +3,10 @@
 .custom-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
   background-color: rgba(0, 183, 255, 0.15) ;
 }
+
+/* Make table header stay in place as the user scrolls down the page */
+th, thead {
+ position: sticky;
+ top: 0;
+ background-color: white;
+}
