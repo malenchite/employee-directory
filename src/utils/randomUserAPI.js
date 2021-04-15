@@ -1,7 +1,7 @@
 /* Returns an array of random user data */
-async function randomUsers(count) {
+function randomUsers(count) {
   const apiURL = "https://randomuser.me/api/?nat=us&results=" + count;
-  const users = await fetch(apiURL)
+  return fetch(apiURL)
     .then(response => response.json())
     .then(users => users.results.map(user => {
       return {
@@ -12,10 +12,8 @@ async function randomUsers(count) {
         phone: user.phone,
         id: user.login.uuid
       }
-    }
-    ));
-
-  return users;
+    }))
+    .catch(err => console.log(err));
 }
 
 export default randomUsers;

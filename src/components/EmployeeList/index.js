@@ -1,5 +1,5 @@
 import React from "react"
-import randomUsers from "./randomUserAPI"
+import randomUserAPI from "../../utils/randomUserAPI"
 import Employee from "../Employee"
 import StateSelect from "../StateSelect"
 import SortHeader from "../SortHeader"
@@ -17,7 +17,7 @@ class EmployeeList extends React.Component {
 
   /* Construct the list of employees on component mount */
   componentDidMount() {
-    randomUsers(this.props.count)
+    randomUserAPI(this.props.count)
       .then(users => {
         this.setState({ employees: users });
       });
