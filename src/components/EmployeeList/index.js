@@ -98,8 +98,8 @@ class EmployeeList extends React.Component {
     filtered = this.state.stateFilter !== "All" && employee.state !== this.state.stateFilter;
 
     /* Filter based on name */
-    filtered |= !(employee.firstName.toUpperCase().includes(this.state.nameFilter.toUpperCase())
-      || employee.lastName.toUpperCase().includes(this.state.nameFilter.toUpperCase()));
+    filtered |= !(employee.firstName.toUpperCase().startsWith(this.state.nameFilter.toUpperCase())
+      || employee.lastName.toUpperCase().startsWith(this.state.nameFilter.toUpperCase()));
 
     return !filtered;
   }
